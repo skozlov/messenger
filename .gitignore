@@ -1,0 +1,9 @@
+# IDE
+/.idea
+/*.iml
+/.bsp
+
+# build artifacts
+/target
+/project/target
+/project/project/target
