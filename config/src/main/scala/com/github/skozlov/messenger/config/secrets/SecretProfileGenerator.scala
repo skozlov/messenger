@@ -23,12 +23,12 @@ object SecretProfileGenerator {
   private val templatePackage = "com.github.skozlov.messenger.config.secrets"
   private val templateObjectName = "SecretProfileTemplate"
 
-  /**
-   * Replaces each occurrence of `"???"` placeholder with `"""Secret("<UUIDv4 without hyphen>")"""`.
-   *
-   * This method is intended to be used only for short templates with small amount of placeholders,
-   * otherwise it may be slow.
-   */
+  /** Replaces each occurrence of `"???"` placeholder with `"""Secret("<UUIDv4
+    * without hyphen>")"""`.
+    *
+    * This method is intended to be used only for short templates with small
+    * amount of placeholders, otherwise it may be slow.
+    */
   @tailrec
   private def substituteSecretValues(template: String): String = {
     val secretValue = randomUUID().toString.replace("-", "")
@@ -41,6 +41,29 @@ object SecretProfileGenerator {
     } else {
       substituteSecretValues(result)
     }
+  }
+
+  private def templateContentToProfileContent(
+      template: String,
+      templatePackage: String,
+      profilePackage: String,
+      templateObjectName: String,
+      profileObjectName: String,
+  ): String = {
+    var result = substituteSecretValues(template)
+    if (templatePackage != profilePackage) {
+      result = result.replace(
+        "package " + templatePackage,
+        "package " + profilePackage,
+      )
+    }
+    if (templateObjectName != profileObjectName) {
+      result = result.replace(
+        "object " + templateObjectName,
+        "object " + profileObjectName,
+      )
+    }
+    result
   }
 
   @main
@@ -68,7 +91,7 @@ object SecretProfileGenerator {
     }
 
     if (profileFile.toFile.exists()) {
-      //todo
+      // todo
     } else {
       if (!profilesDir.toFile.exists()) {
         createDirectories(
