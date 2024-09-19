@@ -26,9 +26,6 @@ object SecretProfileGenerator {
 
   @main
   def generate(repositoryRoot: String, profileName: String): Unit = {
-    println("Repository root: " + repositoryRoot)
-    println("Profile name: " + profileName)
-
     val sourceCodeBaseDir = Paths.get(repositoryRoot, sourceCodeBasePath)
     val profilesDir =
       sourceCodeBaseDir.resolve(profilePackage.replace('.', '/'))
@@ -66,10 +63,9 @@ object SecretProfileGenerator {
     }
 
     if (profileFile.toFile.exists()) {
-      println("Profile file already exists: " + profileFile.toAbsolutePath)
+      //todo
     } else {
       if (!profilesDir.toFile.exists()) {
-        println("Creating profile directory: " + profilesDir.toAbsolutePath)
         createDirectories(
           profilesDir,
           posixPermissions = directoryPosixPermissions,
@@ -77,7 +73,6 @@ object SecretProfileGenerator {
       }
 
       val fileContent = prepareFileContent
-      println("Creating profile file: " + profileFile.toAbsolutePath)
       createFile(profileFile, filePosixPermissions)
       writeStringToFile(
         profileFile.toFile,
