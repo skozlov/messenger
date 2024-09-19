@@ -22,7 +22,26 @@ object SecretProfileGenerator {
   private val filePosixPermissions = "rw-------"
   private val templatePackage = "com.github.skozlov.messenger.config.secrets"
   private val templateObjectName = "SecretProfileTemplate"
-  private val secretValuePlaceholderRegex = """\Q???\E"""
+
+  /**
+   * Replaces each occurrence of `"???"` placeholder with `"""Secret("<UUIDv4 without hyphen>")"""`.
+   *
+   * This method is intended to be used only for short templates with small amount of placeholders,
+   * otherwise it may be slow.
+   */
+  @tailrec
+  private def substituteSecretValues(template: String): String = {
+    val secretValue = randomUUID().toString.replace("-", "")
+    val result = template.replaceFirst(
+      """\Q???\E""",
+      s"""Secret("$secretValue")""",
+    )
+    if (result == template) {
+      result
+    } else {
+      substituteSecretValues(result)
+    }
+  }
 
   @main
   def generate(repositoryRoot: String, profileName: String): Unit = {
@@ -37,20 +56,6 @@ object SecretProfileGenerator {
         sourceCodeBaseDir
           .resolve(templatePackage.replace('.', '/'))
           .resolve(templateObjectName + ".scala")
-
-      @tailrec
-      def substituteSecretValues(template: String): String = {
-        val secretValue = randomUUID().toString.replace("-", "")
-        val result = template.replaceFirst(
-          secretValuePlaceholderRegex,
-          s"""Secret("$secretValue")""",
-        )
-        if (result == template) {
-          result
-        } else {
-          substituteSecretValues(result)
-        }
-      }
 
       substituteSecretValues(
         readFileToString(templateFile.toFile, DefaultCharset)
