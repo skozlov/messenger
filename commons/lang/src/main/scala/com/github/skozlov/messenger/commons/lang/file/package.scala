@@ -35,4 +35,10 @@ package object file {
       Files.createFile(path)
     }
   }
+  
+  def javaPackagePath(packageName: String, sourceCodeBaseDir: Path): Path = {
+    sourceCodeBaseDir.resolve(
+      packageName.replace(".", sourceCodeBaseDir.getFileSystem.getSeparator)
+    )
+  }
 }
