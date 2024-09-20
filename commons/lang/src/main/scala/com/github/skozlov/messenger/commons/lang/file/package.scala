@@ -36,9 +36,9 @@ package object file {
     }
   }
   
-  def javaPackagePath(packageName: String, sourceCodeBaseDir: Path): Path = {
-    sourceCodeBaseDir.resolve(
-      packageName.replace(".", sourceCodeBaseDir.getFileSystem.getSeparator)
+  def javaPackagePath(packageName: String, moduleSourceBaseDir: Path): Path = {
+    moduleSourceBaseDir.resolve(
+      packageName.replace(".", moduleSourceBaseDir.getFileSystem.getSeparator)
     )
   }
 }

@@ -8,7 +8,7 @@ class FileUtilsTest extends Test {
   test("javaPackagePath") {
     javaPackagePath(
       packageName = "com.github",
-      sourceCodeBaseDir = Paths.get("a", "b"),
+      moduleSourceBaseDir = Paths.get("a", "b"),
     ) shouldBe Paths.get("a", "b", "com", "github")
   }
 }
