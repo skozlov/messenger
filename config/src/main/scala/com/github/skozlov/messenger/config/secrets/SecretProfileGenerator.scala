@@ -24,6 +24,27 @@ object SecretProfileGenerator {
   private val templatePackage = "com.github.skozlov.messenger.config.secrets"
   private val templateObjectName = "SecretProfileTemplate"
 
+  private def templateContentToProfileContent(
+      template: String,
+      templateObjectType: Class[? <: Secrets],
+      profileObjectType: Class[? <: Secrets],
+  ): String = {
+    val withSecrets = substituteSecretValues(template)
+    if (templateObjectType == profileObjectType) {
+      withSecrets
+    } else {
+      withSecrets
+        .replace(
+          "package " + templateObjectType.getPackageName,
+          "package " + profileObjectType.getPackageName,
+        )
+        .replace(
+          "object " + scalaObjectName(templateObjectType),
+          "object " + scalaObjectName(profileObjectType),
+        )
+    }
+  }
+
   /** Replaces each occurrence of `???` placeholder with `Secret("<UUIDv4
     * without hyphen>")`.
     *
@@ -45,27 +66,11 @@ object SecretProfileGenerator {
     }
   }
 
-  private def templateContentToProfileContent(
-      template: String,
-      templatePackage: String,
-      profilePackage: String,
-      templateObjectName: String,
-      profileObjectName: String,
-  ): String = {
-    var result = substituteSecretValues(template)
-    if (templatePackage != profilePackage) {
-      result = result.replace(
-        "package " + templatePackage,
-        "package " + profilePackage,
-      )
-    }
-    if (templateObjectName != profileObjectName) {
-      result = result.replace(
-        "object " + templateObjectName,
-        "object " + profileObjectName,
-      )
-    }
-    result
+  /** Gets name of the scala object by the given Class. Works only for top-level
+    * (not nested) objects.
+    */
+  private def scalaObjectName(_class: Class[?]): String = {
+    _class.getSimpleName.stripSuffix("$")
   }
 
   /** If profile already exists, replaces `???` placeholders with unique
