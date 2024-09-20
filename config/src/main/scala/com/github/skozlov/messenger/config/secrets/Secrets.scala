@@ -13,4 +13,8 @@ object Secrets {
   object Secret {
     def apply(value: String): Secret = value
   }
+
+  extension (secret: Secret) {
+    def value: String = secret
+  }
 }

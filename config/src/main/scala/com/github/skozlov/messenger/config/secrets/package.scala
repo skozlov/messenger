@@ -1,10 +1,12 @@
 package com.github.skozlov.messenger.config
 
 import com.github.skozlov.messenger.commons.lang.file.javaPackagePath
+import com.github.skozlov.messenger.config.secrets.Secrets.Secret
 import org.apache.commons.lang3.StringUtils.capitalize
 
 import java.nio.file.Path
 import java.util.Locale
+import java.util.regex.{Matcher, Pattern}
 
 package object secrets {
   val SecretProfilePackage: String =
@@ -28,5 +30,14 @@ package object secrets {
       SecretProfileTemplate.getClass.getPackageName,
       moduleSourceBaseDir,
     ).resolve(fileName)
+  }
+
+  def insertSecrets(template: String, secrets: Iterator[Secret]): String = {
+    Pattern
+      .compile("""\Q???\E""")
+      .matcher(template)
+      .replaceAll(_ =>
+        s"""Secret("${Matcher.quoteReplacement(secrets.next().value)}")"""
+      )
   }
 }

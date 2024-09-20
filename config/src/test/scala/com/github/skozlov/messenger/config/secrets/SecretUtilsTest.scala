@@ -1,6 +1,7 @@
 package com.github.skozlov.messenger.config.secrets
 
 import com.github.skozlov.messenger.commons.test.Test
+import com.github.skozlov.messenger.config.secrets.Secrets.Secret
 
 import java.nio.file.Paths
 
@@ -41,5 +42,19 @@ class SecretUtilsTest extends Test {
       "secrets",
       "SecretProfileTemplate.scala",
     )
+  }
+
+  test("insertSecrets") {
+    insertSecrets(
+      template = """
+                   |override def A: Secret = ???
+                   |override def B: Secret = ???
+                   |""".stripMargin,
+      secrets = Iterator(Secret("a"), Secret("b")),
+    ) shouldBe
+      """
+        |override def A: Secret = Secret("a")
+        |override def B: Secret = Secret("b")
+        |""".stripMargin
   }
 }
