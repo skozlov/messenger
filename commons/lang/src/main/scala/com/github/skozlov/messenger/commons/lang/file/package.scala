@@ -35,7 +35,7 @@ package object file {
       Files.createFile(path)
     }
   }
-  
+
   def javaPackagePath(packageName: String, moduleSourceBaseDir: Path): Path = {
     moduleSourceBaseDir.resolve(
       packageName.replace(".", moduleSourceBaseDir.getFileSystem.getSeparator)

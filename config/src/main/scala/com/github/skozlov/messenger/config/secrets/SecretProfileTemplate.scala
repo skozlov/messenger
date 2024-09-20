@@ -4,6 +4,6 @@ import com.github.skozlov.messenger.config.secrets.Secrets.Secret
 
 object SecretProfileTemplate
     extends com.github.skozlov.messenger.config.secrets.Secrets {
-  override val DbPasswordAdmin: Secret = ???
-  override val DbPasswordRest: Secret = ???
+  override def DbPasswordAdmin: Secret = ???
+  override def DbPasswordRest: Secret = ???
 }

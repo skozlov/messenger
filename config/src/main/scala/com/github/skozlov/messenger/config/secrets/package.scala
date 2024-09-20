@@ -10,6 +10,9 @@ package object secrets {
   val SecretProfilePackage: String =
     "com.github.skozlov.messenger.config.secrets.profiles"
 
+  lazy val TemplateObjectName: String =
+    SecretProfileTemplate.getClass.getSimpleName.stripSuffix("$")
+
   def profileNameToObjectName(profileName: String): String = {
     capitalize(profileName.toLowerCase(Locale.ROOT))
   }
