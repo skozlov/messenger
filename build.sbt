@@ -12,7 +12,10 @@ ThisBuild / scalacOptions ++= Seq(
 
 lazy val commonsLang = (project in file("commons") / "lang")
   .settings(
-    name := "messenger-commons-lang"
+    name := "messenger-commons-lang",
+    libraryDependencies ++= Seq(
+      "org.scalatest" %% "scalatest" % "3.2.19" % Test
+    ),
   )
 
 lazy val core = (project in file("core"))
@@ -28,7 +31,10 @@ lazy val config = (project in file("config"))
       "commons-io" % "commons-io" % "2.16.1",
     ),
   )
-  .dependsOn(commonsLang, core)
+  .dependsOn(
+    commonsLang % "compile->compile;test->test",
+    core,
+  )
 
 lazy val root = (project in file("."))
   .settings(
