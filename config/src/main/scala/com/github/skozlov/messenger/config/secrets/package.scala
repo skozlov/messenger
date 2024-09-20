@@ -21,4 +21,12 @@ package object secrets {
     val fileName = profileNameToObjectName(profileName) + ".scala"
     javaPackagePath(SecretProfilePackage, moduleSourceBaseDir).resolve(fileName)
   }
+
+  def templatePath(moduleSourceBaseDir: Path): Path = {
+    val fileName = TemplateObjectName + ".scala"
+    javaPackagePath(
+      SecretProfileTemplate.getClass.getPackageName,
+      moduleSourceBaseDir,
+    ).resolve(fileName)
+  }
 }

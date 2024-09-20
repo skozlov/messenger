@@ -29,4 +29,17 @@ class SecretUtilsTest extends Test {
       "Test.scala",
     )
   }
+
+  test("templatePath") {
+    templatePath(Paths.get("moduleSourceBaseDir")) shouldBe Paths.get(
+      "moduleSourceBaseDir",
+      "com",
+      "github",
+      "skozlov",
+      "messenger",
+      "config",
+      "secrets",
+      "SecretProfileTemplate.scala",
+    )
+  }
 }
